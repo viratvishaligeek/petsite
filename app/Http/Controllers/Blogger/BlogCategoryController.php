@@ -42,8 +42,6 @@ class BlogCategoryController extends Controller
 
             return DataTables::eloquent($query)->addIndexColumn()->editColumn('name', function ($row) {
                 return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
-            })->editColumn('tenant', function ($row) {
-                return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name ?? '' . '</p>';
             })->editColumn('post_count', function ($row) {
                 return '<p class="text-sm mb-0 text-capitalize">' . $row->postsCount() . '</p>';
             })->editColumn('status', function ($row) {
@@ -71,7 +69,7 @@ class BlogCategoryController extends Controller
                 $btn .= '</div>';
 
                 return $btn;
-            })->rawColumns(['name', 'tenant', 'post_count', 'status', 'action'])
+            })->rawColumns(['name', 'post_count', 'status', 'action'])
                 ->make(true);
         }
 

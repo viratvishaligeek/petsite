@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <div class="row">
@@ -23,13 +23,6 @@
                         <input class="form-control" id="floatingInputGrid" disabled value="{{ $data->phone }}"
                             placeholder="phone" maxlength="10" />
                         <label for="floatingInputGrid">Phone</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="form-floating">
-                        <input class="form-control" id="floatingInputGrid" disabled
-                            value="{{ TenantList($data->tenant_id)->name }}" placeholder="password_confirmation" />
-                        <label for="floatingSelectPrivacy">Assign Tenant Access</label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">

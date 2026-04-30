@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <nav class="mb-3" aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
@@ -99,7 +99,7 @@
     </div>
 @endsection
 @section('script')
-    @include('backend.partial.datatable-scripts')
+    @include('partial.datatable-scripts')
 
     <script>
         $(document).ready(function() {

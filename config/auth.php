@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'admin',
         ],
+        'user' => [
+            'driver' => 'sanctum',
+            'provider' => 'user',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'admin' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'user' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
     ],
 
@@ -88,6 +96,12 @@ return [
     'passwords' => [
         'admin' => [
             'provider' => 'admin',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'user' => [
+            'provider' => 'user',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

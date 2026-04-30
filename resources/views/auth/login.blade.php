@@ -1,4 +1,4 @@
-@extends('backend.auth.layout')
+@extends('auth.layout')
 @section('content')
     <div class="col-11 col-sm-10 col-xl-8">
         <div class="card border border-translucent auth-card">

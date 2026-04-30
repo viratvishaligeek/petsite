@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SeoPlugin extends Model
 {
-    use BelongsToTenant, HasFactory;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +16,6 @@ class SeoPlugin extends Model
      */
     protected $fillable = [
 
-        'tenant_id',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -49,13 +47,4 @@ class SeoPlugin extends Model
     {
         return $this->morphTo();
     }
-
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
-
-    protected $hidden = [
-        'tenant_id',
-    ];
 }

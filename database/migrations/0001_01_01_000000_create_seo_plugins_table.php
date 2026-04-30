@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('seo_plugins', function (Blueprint $table) {
             $table->id();
             $table->morphs('seoable');
-            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->longText('meta_title')->nullable();
             $table->longText('meta_description')->nullable();
             $table->longText('meta_keywords')->nullable();

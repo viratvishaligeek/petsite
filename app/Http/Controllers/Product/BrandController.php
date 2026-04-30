@@ -43,8 +43,6 @@ class BrandController extends Controller
                 return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
             })->editColumn('product_count', function ($row) {
                 return '<p class="text-sm mb-0 text-capitalize">00</p>';
-            })->editColumn('tenant', function ($row) {
-                return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name . '</p>';
             })->editColumn('status', function ($row) {
                 return GetStatusBadge($row->status);
             })->editColumn('created_at', function ($row) {
@@ -70,7 +68,7 @@ class BrandController extends Controller
                 $btn .= '</div>';
 
                 return $btn;
-            })->rawColumns(['name', 'product_count', 'tenant', 'status', 'action'])->make(true);
+            })->rawColumns(['name', 'product_count', 'status', 'action'])->make(true);
         }
 
         return view('brand.index', compact('pageName'));

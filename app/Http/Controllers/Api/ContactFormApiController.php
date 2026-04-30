@@ -31,7 +31,6 @@ class ContactFormApiController extends Controller
         }
         try {
             $data = $validator->validated();
-            $data['tenant_id'] = $request->tenant_id;
             $contactForm = ContactForm::create($data);
             return response()->json([
                 'status' => 200,

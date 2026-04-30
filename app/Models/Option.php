@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Option extends Model
 {
-    use BelongsToTenant, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,13 +19,8 @@ class Option extends Model
         'name',
         'slug',
         'status',
-        'tenant_id',
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
 
     public function values()
     {
@@ -34,7 +28,6 @@ class Option extends Model
     }
 
     protected $hidden = [
-        'tenant_id',
         'created_at',
         'updated_at',
         'deleted_at',

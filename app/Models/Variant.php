@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model
 {
-    use BelongsToTenant, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,13 +41,9 @@ class Variant extends Model
         'custom_table',
         'default',
         'status',
-        'tenant_id',
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
+
 
     public function product()
     {
@@ -66,7 +61,6 @@ class Variant extends Model
             ->withTimestamps();
     }
     protected $hidden = [
-        'tenant_id',
         'created_at',
         'updated_at',
         'deleted_at',

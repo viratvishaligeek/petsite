@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <div class="row">
@@ -40,19 +40,6 @@
                         <input class="form-control" id="floatingInputGrid" name="password_confirmation"
                             value="{{ old('password_confirmation') }}" type="text" placeholder="password_confirmation" />
                         <label for="floatingInputGrid">Password Confirmation ( Leave Blank for skip )</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="form-floating">
-                        <select class="form-select" name="tenant_id" id="floatingSelectPrivacy">
-                            <option selected="selected" disabled>Select Tenant</option>
-                            @foreach ($tenants as $tenant)
-                                <option value="{{ $tenant->id }}"
-                                    {{ old('tenant_id') ?? $data->tenant_id == $tenant->id ? 'selected' : '' }}>
-                                    {{ $tenant->name }}</option>
-                            @endforeach
-                        </select>
-                        <label for="floatingSelectPrivacy">Assign Tenant Access</label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">

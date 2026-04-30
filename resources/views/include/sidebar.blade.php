@@ -2,7 +2,6 @@
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content">
             <ul class="navbar-nav flex-column" id="navbarVerticalNav">
-                @include('backend.partial.tenant-selecter')
                 @foreach (config('sidemenu') as $menu)
 
                     @php

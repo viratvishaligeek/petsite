@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\OptionValue;
 use App\Models\Product;
 use App\Models\ProductFaq;
 use Illuminate\Http\Request;
@@ -14,16 +15,9 @@ class ProductApiController extends Controller
     // featured product
     public function featuredProducts(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
-        $cacheKey = "featured_products_t{$tenantId}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId) {
-            return Product::withoutGlobalScope('tenant_filter')
+        $cacheKey = "featured_products";
+        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Product::query()
                 ->select([
                     'id',
                     'name',
@@ -43,9 +37,7 @@ class ProductApiController extends Controller
                     'brand_id',
                     'has_variation',
                     'status',
-                    'tenant_id',
                 ])
-                ->where('tenant_id', $tenantId)
                 ->where('status', 'active')
                 ->where('featured_product', 1)
                 ->with([
@@ -71,16 +63,9 @@ class ProductApiController extends Controller
     // top product
     public function topProducts(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
-        $cacheKey = "top_products_t{$tenantId}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId) {
-            return Product::withoutGlobalScope('tenant_filter')
+        $cacheKey = "top_products";
+        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Product::query()
                 ->select([
                     'id',
                     'name',
@@ -100,9 +85,7 @@ class ProductApiController extends Controller
                     'brand_id',
                     'has_variation',
                     'status',
-                    'tenant_id',
                 ])
-                ->where('tenant_id', $tenantId)
                 ->where('status', 'active')
                 ->where('top_product', 1)
                 ->with([
@@ -128,16 +111,9 @@ class ProductApiController extends Controller
     // recent product
     public function recentProducts(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
-        $cacheKey = "recent_products_t{$tenantId}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId) {
-            return Product::withoutGlobalScope('tenant_filter')
+        $cacheKey = "recent_products";
+        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Product::query()
                 ->select([
                     'id',
                     'name',
@@ -157,9 +133,7 @@ class ProductApiController extends Controller
                     'brand_id',
                     'has_variation',
                     'status',
-                    'tenant_id',
                 ])
-                ->where('tenant_id', $tenantId)
                 ->where('status', 'active')
                 ->with([
                     'category:id,name',
@@ -184,28 +158,19 @@ class ProductApiController extends Controller
     // all product categories
     public function category(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
-        $cacheKey = "product_categories_t{$tenantId}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId) {
-            return Category::withoutGlobalScope('tenant_filter')
+        $cacheKey = "product_categories";
+        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Category::query()
                 ->select([
                     'id',
                     'name',
                     'slug',
                     'parent_id',
-                    'tenant_id',
                     'is_parent',
                     'featured_image',
                     'description',
                     'status',
                 ])
-                ->where('tenant_id', $tenantId)
                 ->withCount('products')
                 ->where('status', 'active')
                 ->orderBy('updated_at', 'desc')
@@ -224,32 +189,24 @@ class ProductApiController extends Controller
     public function categoryProducts(Request $request, string $slug)
     {
         $validated = $request->validate([
-            'tenant_id' => 'required|integer|exists:tenants,id',
             'per_page' => 'nullable|integer|min:1|max:50',
             'page' => 'nullable|integer|min:1',
         ]);
-
-        $tenantId = $validated['tenant_id'];
         $perPage = $validated['per_page'] ?? 15;
         $page = $validated['page'] ?? 1;
-
         $category = Category::select('id')
             ->where('slug', $slug)
             ->first();
-
         if (!$category) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Category not found'
             ], 404);
         }
-
         $categoryId = $category->id;
-
-        $cacheKey = "category_products_{$tenantId}_{$categoryId}_{$page}_{$perPage}";
-        $products = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($tenantId, $categoryId, $perPage, $page) {
-            return Product::withoutGlobalScope('tenant_filter')
-                ->where('tenant_id', $tenantId)
+        $cacheKey = "category_products_{$categoryId}_{$page}_{$perPage}";
+        $products = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($categoryId, $perPage, $page) {
+            return Product::query()
                 ->where('status', 'active')
                 ->where(function ($q) use ($categoryId) {
                     $q->where('category_id', $categoryId)
@@ -274,7 +231,6 @@ class ProductApiController extends Controller
                     'brand_id',
                     'has_variation',
                     'status',
-                    'tenant_id'
                 ])
                 ->with([
                     'category:id,name',
@@ -301,93 +257,10 @@ class ProductApiController extends Controller
             ],
         ]);
     }
-    // public function categoryProducts(Request $request, $slug)
-    // {
-    //     $tenantId = $request->tenant_id;
-    //     if (!$tenantId) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Tenant Details is required'
-    //         ], 400);
-    //     }
-
-    //     $categoryData = Category::where('slug', $slug)->first();
-    //     if (!$categoryData) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Category Not Found'
-    //         ], 400);
-    //     }
-    //     $categoryId = $categoryData->id;
-    //     $perPage = (int) ($request->per_page ?? 15);
-    //     $page = (int) ($request->page ?? 1);
-    //     // safety cap
-    //     $perPage = min($perPage, 50);
-    //     $cacheKey = "category_products_t{$tenantId}_cat{$categoryId}_p{$page}_pp{$perPage}";
-    //     $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId, $categoryId, $perPage, $page) {
-    //         return Product::withoutGlobalScope('tenant_filter')
-    //             ->select([
-    //                 'id',
-    //                 'name',
-    //                 'slug',
-    //                 'category_id',
-    //                 'sub_category_id',
-    //                 'gst',
-    //                 'mrp',
-    //                 'sell_price',
-    //                 'discount_type',
-    //                 'discount',
-    //                 'stock',
-    //                 'stock_status',
-    //                 'short_description',
-    //                 'top_product',
-    //                 'featured_product',
-    //                 'brand_id',
-    //                 'has_variation',
-    //                 'status',
-    //                 'tenant_id',
-    //             ])
-    //             ->where('tenant_id', $tenantId)
-    //             ->where(function ($q) use ($categoryId) {
-    //                 $q->where('category_id', $categoryId)
-    //                     ->orWhere('sub_category_id', $categoryId);
-    //             })
-    //             ->where('status', 'active')
-    //             ->with([
-    //                 'category:id,name',
-    //                 'subcategory:id,name',
-    //                 'brand:id,name',
-    //                 'images',
-    //                 'variants.images'
-    //             ])
-    //             ->orderBy('updated_at', 'desc')
-    //             ->paginate($perPage, ['*'], 'page', $page);
-    //     });
-    //     return response()->json([
-    //         'status' => 200,
-    //         'message' => 'success',
-    //         'data' => $data->items(),
-    //         'pagination' => [
-    //             'total' => $data->total(),
-    //             'per_page' => $data->perPage(),
-    //             'current_page' => $data->currentPage(),
-    //             'last_page' => $data->lastPage(),
-    //             'next_page_url' => $data->nextPageUrl(),
-    //             'prev_page_url' => $data->previousPageUrl(),
-    //         ],
-    //     ], 200);
-    // }
 
     // search function
-    public function search(Request $request, $query)
+    public function search(Request $request, string $query)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
         $query = trim($query);
         if (strlen($query) < 3) {
             return response()->json([
@@ -403,9 +276,9 @@ class ProductApiController extends Controller
         }
         $limit = (int) ($request->limit ?? 5);
         $limit = min($limit, 50);
-        $cacheKey = "search_t{$tenantId}_q" . md5($query) . "_limit{$limit}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($tenantId, $query, $limit) {
-            return Product::withoutGlobalScope('tenant_filter')
+        $cacheKey = "search_q" . md5($query) . "_limit{$limit}";
+        $data = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($query, $limit) {
+            return Product::query()
                 ->select([
                     'id',
                     'name',
@@ -425,9 +298,7 @@ class ProductApiController extends Controller
                     'brand_id',
                     'has_variation',
                     'status',
-                    'tenant_id',
                 ])
-                ->where('tenant_id', $tenantId)
                 ->where('status', 'active')
                 ->where(function ($q) use ($query) {
                     $q->where('name', 'LIKE', "%{$query}%")
@@ -456,19 +327,12 @@ class ProductApiController extends Controller
     // all product list
     public function productList(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Tenant Details is required'
-            ], 400);
-        }
         $perPage = (int) $request->per_page ?: 20;
         $page = (int) $request->page ?: 1;
-        $cacheKey = "products_t{$tenantId}_p{$page}_pp{$perPage}_sort{$request->sort_by}";
-        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId, $perPage, $request) {
-            $query = Product::withoutGlobalScope('tenant_filter')
-                ->select(
+        $cacheKey = "products_p{$page}_pp{$perPage}_sort{$request->sort_by}";
+        $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage, $request) {
+            $query = Product::query()
+                ->select([
                     'id',
                     'name',
                     'slug',
@@ -487,8 +351,7 @@ class ProductApiController extends Controller
                     'top_product',
                     'featured_product',
                     'status',
-                )
-                ->where('tenant_id', $tenantId)
+                ])
                 ->where('status', 'active')
                 ->with([
                     'category:id,name',
@@ -534,17 +397,17 @@ class ProductApiController extends Controller
     }
 
     // product detail response function
-    public function productDetail(Request $request, $slug)
+    public function productDetail(Request $request, string $slug)
     {
         try {
-            $product = Product::withoutGlobalScope('tenant_filter')
+            $product = Product::query()
                 ->where('slug', $slug)
                 ->with(['variants.options.values', 'images', 'category'])
                 ->where('status', 'active')
                 ->firstOrFail();
             $reviewEligible = false;
             $filteredOptions = $this->getFilteredOptions($product);
-            $faq = ProductFaq::where('product_id', $product->id)
+            $faq = ProductFaq::query()->where('product_id', $product->id)
                 ->select('id', 'question', 'answer', 'created_at')->get();
             $review = [];
             $minPrice = null;
@@ -587,7 +450,7 @@ class ProductApiController extends Controller
                 'top_product' => $product->top_product,
                 'featured_product' => $product->featured_product,
             ];
-            $related = Product::withoutGlobalScope('tenant_filter')
+            $related = Product::query()
                 ->select([
                     'id',
                     'name',
@@ -661,7 +524,7 @@ class ProductApiController extends Controller
             }
         }
         $valueIds = array_unique($valueIds);
-        $values = \App\Models\OptionValue::whereIn('id', $valueIds)
+        $values = OptionValue::whereIn('id', $valueIds)
             ->get()
             ->keyBy('id');
         foreach ($product->variants as $variant) {

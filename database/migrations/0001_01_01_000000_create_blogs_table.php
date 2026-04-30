@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('publish_date');
             $table->longText('tags')->nullable();
             $table->string('category_id', 100)->index();
-            $table->bigInteger('tenant_id')->index();
             $table->longText('description')->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();

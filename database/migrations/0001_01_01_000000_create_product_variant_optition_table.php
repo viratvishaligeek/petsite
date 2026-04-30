@@ -45,7 +45,6 @@ return new class extends Migration
             $table->enum('has_variation', ['yes', 'no'])->default('no');
             $table->enum('status', ['active', 'inactive', 'draft'])->default('draft')->index();
             $table->longText('custom_table')->nullable();
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -77,7 +76,6 @@ return new class extends Migration
             $table->longText('custom_table')->nullable();
             $table->boolean('default')->default(0);
             $table->enum('status', ['active', 'inactive', 'draft'])->default('draft')->index();
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });

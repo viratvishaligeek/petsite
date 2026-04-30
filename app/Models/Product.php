@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\SeoPlugin;
-use App\Traits\BelongsToTenant;
 use App\Traits\HasSeo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use BelongsToTenant, HasFactory, SoftDeletes, HasSeo;
+    use HasFactory, SoftDeletes, HasSeo;
 
     /**
      * The attributes that are mass assignable.
@@ -51,14 +50,9 @@ class Product extends Model
         'has_variation',
         'status',
         'custom_table',
-        'tenant_id'
     ];
 
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
 
     public function category()
     {
@@ -97,7 +91,6 @@ class Product extends Model
 
 
     protected $hidden = [
-        'tenant_id',
         'created_at',
         'updated_at',
         'deleted_at',

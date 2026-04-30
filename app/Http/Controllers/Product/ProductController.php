@@ -40,8 +40,6 @@ class ProductController extends Controller
             return DataTables::eloquent($query)
                 ->addIndexColumn()->editColumn('name', function ($row) {
                     return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
-                })->editColumn('tenant', function ($row) {
-                    return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name . '</p>';
                 })->editColumn('status', function ($row) {
                     return GetStatusBadge($row->status);
                 })->editColumn('created_at', function ($row) {
@@ -62,7 +60,7 @@ class ProductController extends Controller
                             </button>
                         </form>
                     </div>';
-                })->rawColumns(['name', 'tenant', 'status', 'action'])->make(true);
+                })->rawColumns(['name', 'status', 'action'])->make(true);
         }
 
         $categories = Category::where('is_parent', 'yes')->get();
@@ -109,7 +107,6 @@ class ProductController extends Controller
                         'name' => $uniqueName,
                         'combo' => $variantCombo,
                         'status' => 'active',
-                        'tenant_id' => $product->tenant_id,
                         'stock_status' => 'in_stock',
                         'sku' => strtoupper(Str::random(10)),
                     ]);
@@ -153,7 +150,7 @@ class ProductController extends Controller
         ));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $data = Product::findOrFail($this->decryptId($id));
         $validated = $request->validate([

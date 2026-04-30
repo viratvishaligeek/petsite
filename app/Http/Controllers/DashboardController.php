@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -21,34 +19,6 @@ class DashboardController extends Controller
         $pageName = 'Dashboard';
 
         return view('dashboard', compact('pageName'));
-    }
-
-    public function updateActiveTenant(Request $request)
-    {
-        $user = Auth::user();
-        $tenantId = $request->input('tenant_id');
-        try {
-            if ($tenantId === '0' || $tenantId === 0) {
-                $user->tenant_id = 0;
-            } else {
-                $request->validate([
-                    'tenant_id' => 'required|integer|exists:tenants,id',
-                ]);
-                $user->tenant_id = (int) $tenantId;
-            }
-            $user->save();
-
-            return response()->json([
-                'success' => true,
-                'tenant_id' => $user->tenant_id,
-                'message' => $user->tenant_id === 0 ? 'Viewing all tenants' : 'Tenant selected successfully',
-            ]);
-        } catch (\Exception $th) {
-            return response()->json([
-                'success' => false,
-                'message' => $th->getMessage(),
-            ]);
-        }
     }
 
     public function clearCache()

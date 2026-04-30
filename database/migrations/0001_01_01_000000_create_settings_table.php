@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('option')->index();
             $table->longText('value')->nullable();
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
         });
     }

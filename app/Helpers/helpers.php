@@ -1,20 +1,18 @@
 <?php
 
 use App\Models\Setting;
-use App\Models\Tenant;
 use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('GlobalSetting')) {
-    function GlobalSetting($key, $tenant_id = null)
+    function GlobalSetting(string $key)
     {
-        $tenantId = $tenant_id ?? 0;
-        $value = Setting::where('tenant_id', $tenantId)->where('option', $key)->first();
+        $value = Setting::where('option', $key)->first();
         return $value->value ?? null;
     }
 }
 
 if (!function_exists('GetStatusBadge')) {
-    function GetStatusBadge($status)
+    function GetStatusBadge(string $status)
     {
         if ($status == 'active') {
             return '<span class="badge badge-phoenix fs-10 badge-phoenix-success"><span class="badge-label">Active</span></span>';
@@ -31,24 +29,6 @@ if (!function_exists('GetStatusBadge')) {
         } else {
             return '';
         }
-    }
-}
-
-if (!function_exists('TenantList')) {
-    function TenantList($id = null)
-    {
-        if (is_null($id)) {
-            $allTenant = (object)[
-                'id' => 0,
-                'name' => 'All Tenants',
-                'domain' => 'all',
-                'status' => 'active',
-                'notes' => 'All Tenants',
-            ];
-            $tenants = Tenant::all();
-            return collect([$allTenant])->merge($tenants);
-        }
-        return Tenant::find($id);
     }
 }
 

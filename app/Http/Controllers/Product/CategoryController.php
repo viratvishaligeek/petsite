@@ -44,8 +44,6 @@ class CategoryController extends Controller
                 return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
             })->editColumn('parent', function ($row) {
                 return '<p class="text-sm mb-0 text-capitalize">' . ($row->parent?->name ?? 'N/A') . '</p>';
-            })->editColumn('tenant', function ($row) {
-                return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name . '</p>';
             })->editColumn('status', function ($row) {
                 return GetStatusBadge($row->status);
             })->addColumn('action', function ($row) {
@@ -69,7 +67,7 @@ class CategoryController extends Controller
                 $btn .= '</div>';
 
                 return $btn;
-            })->rawColumns(['name', 'parent', 'tenant', 'status', 'action'])->make(true);
+            })->rawColumns(['name', 'parent', 'status', 'action'])->make(true);
         }
 
         return view('category.index', compact('pageName'));

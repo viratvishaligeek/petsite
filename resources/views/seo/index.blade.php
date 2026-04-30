@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <nav class="mb-3" aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
@@ -61,7 +61,6 @@
                         <tr>
                             <th class="white-space-nowrap align-middle fs-9 ">Sr. No</th>
                             <th class="white-space-nowrap align-middle">Title</th>
-                            <th class="white-space-nowrap align-middle ">Tenant </th>
                             <th class="white-space-nowrap align-middle ">Status</th>
                             <th class="white-space-nowrap align-middle ">Created At</th>
                             <th class="white-space-nowrap align-middle ">Action </th>
@@ -72,7 +71,6 @@
                             <tr>
                                 <td class="align-middle">{{ $loop->iteration }}</td>
                                 <td class="align-middle">{{ $seo->name }}</td>
-                                <td class="align-middle">{{ $seo->tenant->name ?? 'N/A' }}</td>
                                 <td class="align-middle">
                                     <span class="badge badge-phoenix fs-10 badge-phoenix-success">Active</span>
                                 </td>
@@ -92,7 +90,7 @@
     </div>
 @endsection
 @section('script')
-    @include('backend.partial.datatable-scripts')
+    @include('partial.datatable-scripts')
 
     <script>
         $(document).ready(function() {

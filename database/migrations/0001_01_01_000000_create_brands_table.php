@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('featured_image')->nullable();
             $table->longText('description')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });

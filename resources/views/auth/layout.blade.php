@@ -47,7 +47,7 @@
     <script src="{{ URL::asset('backend') }}/feather-icons/feather.min.js"></script>
     <script src="{{ URL::asset('backend') }}/dayjs/dayjs.min.js"></script>
     <script src="{{ URL::asset('backend') }}/js/phoenix.js"></script>
-    @include('backend.partial.toast')
+    @include('partial.toast')
 
 </body>
 

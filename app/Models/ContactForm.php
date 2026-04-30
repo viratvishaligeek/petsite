@@ -19,12 +19,13 @@ class ContactForm extends Model
         'name',
         'phone',
         'email',
+        'subject',
         'message',
-        'tenant_id',
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 }

@@ -11,17 +11,12 @@ class BlogCatApiController extends Controller
 {
     public function index(Request $request)
     {
-        $tenantId = $request->tenant_id;
-        if (!$tenantId) {
-            return response()->json(['status' => 400, 'message' => 'Tenant Details is required'], 400);
-        }
         $perPage = (int) $request->per_page ?? 20;
         $page = (int) $request->page ?? 1;
 
-        $cacheKey = "blog_categories_t{$tenantId}_p{$page}_pp{$perPage}";
-        $blogsCat = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenantId, $perPage) {
-            return BlogCategory::withoutGlobalScope('tenant_filter')
-                ->where('tenant_id', $tenantId)
+        $cacheKey = "blog_categories_p{$page}_pp{$perPage}";
+        $blogsCat = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage) {
+            return BlogCategory::query()
                 ->where('status', 'active')
                 ->orderBy('updated_at', 'desc')
                 ->paginate($perPage);

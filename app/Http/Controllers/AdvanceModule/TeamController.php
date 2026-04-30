@@ -23,7 +23,7 @@ class TeamController extends Controller
         $this->middleware('can:team-delete')->only('destroy');
     }
 
-    private function decryptId($id)
+    private function decryptId(string $id)
     {
         try {
             return decrypt($id);
@@ -93,8 +93,7 @@ class TeamController extends Controller
     public function create()
     {
         $pageName = 'Create Team';
-        $tenants = TenantList();
-        return view('team.create', compact('pageName', 'tenants'));
+        return view('team.create', compact('pageName'));
     }
 
     public function store(Request $request)
@@ -103,7 +102,6 @@ class TeamController extends Controller
             'name'     => ['required', 'string', 'max:100'],
             'email'    => ['required', 'string', 'max:50', 'email', 'unique:admins,email'],
             'phone'    => ['required', 'numeric', 'digits:10', 'unique:admins,phone'],
-            'tenant_id'  => ['required', 'exists:tenants,id'],
             'status'   => ['required', 'in:active,inactive'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -119,7 +117,7 @@ class TeamController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
         $pageName = 'Team Member Details';
         $team = Admin::findOrFail($this->decryptId($id));
@@ -129,27 +127,24 @@ class TeamController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit(string $id)
     {
         $pageName = 'Edit Team';
         $team = Admin::findOrFail($this->decryptId($id));
-        $tenants = TenantList();
 
         return view('team.edit', [
             'pageName' => $pageName,
             'data' => $team,
-            'tenants' => $tenants
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $team = Admin::findOrFail($this->decryptId($id));
         $validated = $request->validate([
             'name'     => ['required', 'string', 'max:100'],
             'email'    => ['required', 'string', 'max:50', 'email', 'unique:admins,email,' . $team->id],
             'phone'    => ['required', 'numeric', 'digits:10', 'unique:admins,phone,' . $team->id],
-            'tenant_id'  => ['nullable'],
             'status'   => ['required', 'in:active,inactive'],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ]);
@@ -158,9 +153,6 @@ class TeamController extends Controller
             $data = $request->except('password');
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($request->password);
-            }
-            if (!$request->filled('tenant_id')) {
-                $data['tenant_id'] = 0;
             }
             $team->update($data);
             DB::commit();
@@ -172,7 +164,7 @@ class TeamController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $team = Admin::findOrFail($this->decryptId($id));

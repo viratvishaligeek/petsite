@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <form method="POST" action="{{ route('admin.seo-plugin.update', ['type' => $type, 'id' => $data->id]) }}">

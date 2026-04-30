@@ -21,22 +21,19 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->is('admin*')) {
                 return route('admin.login');
             }
-            return route('home');
+            return route('admin.login');
         });
 
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'tenant' => \App\Http\Middleware\TenantMiddleware::class,
         ]);
-
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (Throwable $e, $request) {
             if ($request->is('api/*')) {
-                // Validation Error
                 if ($e instanceof ValidationException) {
                     return response()->json([
                         'status' => 422,
@@ -44,21 +41,18 @@ return Application::configure(basePath: dirname(__DIR__))
                         'errors' => $e->errors(),
                     ], 422);
                 }
-                // Unauthenticated
                 if ($e instanceof AuthenticationException) {
                     return response()->json([
                         'status' => 401,
                         'message' => 'Unauthenticated, Please Login first..',
                     ], 401);
                 }
-                // Route Not Found
                 if ($e instanceof NotFoundHttpException) {
                     return response()->json([
                         'status' => 404,
                         'message' => 'API route not found. Please check typo Error or API url',
                     ], 404);
                 }
-                // Default Error
                 return response()->json([
                     'status' => 500,
                     'message' => config('app.debug')

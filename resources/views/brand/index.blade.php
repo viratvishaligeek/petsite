@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <nav class="mb-3" aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
@@ -84,7 +84,6 @@
                                 <th class="white-space-nowrap align-middle fs-9 ">Sr. No</th>
                                 <th class="white-space-nowrap align-middle">Name</th>
                                 <th class="white-space-nowrap align-middle ">Product Count</th>
-                                <th class="white-space-nowrap align-middle ">Tenant </th>
                                 <th class="white-space-nowrap align-middle ">Status</th>
                                 <th class="white-space-nowrap align-middle ">Created At</th>
                                 <th class="white-space-nowrap align-middle ">Action </th>
@@ -100,7 +99,7 @@
     </div>
 @endsection
 @section('script')
-    @include('backend.partial.datatable-scripts')
+    @include('partial.datatable-scripts')
 
     <script>
         $(document).ready(function() {
@@ -120,12 +119,6 @@
                     orderable: false,
                     searchable: false
 
-                },
-                {
-                    data: 'tenant',
-                    name: 'tenant',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'status',

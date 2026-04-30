@@ -15,15 +15,8 @@ return [
     [
         'title' => 'Advance Module',
         'icon' => 'fa-solid fa-layer-group',
-        'can' => ['tenant-browse', 'team-browse', 'role-browse'],
+        'can' => ['team-browse', 'role-browse'],
         'children' => [
-            [
-                'name' => 'Tenant',
-                'icon' => 'fa-solid fa-building',
-                'route' => 'admin.tenant.index',
-                'active' => 'admin.tenant.*',
-                'can' => ['tenant-browse'],
-            ],
             [
                 'name' => 'Team Members',
                 'icon' => 'fa-solid fa-users',

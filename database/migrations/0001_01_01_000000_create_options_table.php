@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name', 150)->index();
             $table->string('slug', 150);
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -44,8 +44,6 @@ class OptionController extends Controller
             return DataTables::eloquent($query)
                 ->addIndexColumn()->editColumn('name', function ($row) {
                     return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
-                })->editColumn('tenant', function ($row) {
-                    return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name . '</p>';
                 })->editColumn('values', function ($row) {
                     return '<p class="text-sm mb-0 text-capitalize">' . $row->values->count() . '</p>';
                 })->editColumn('status', function ($row) {
@@ -73,7 +71,7 @@ class OptionController extends Controller
                     $btn .= '</div>';
 
                     return $btn;
-                })->rawColumns(['name', 'values', 'tenant', 'status', 'action'])->make(true);
+                })->rawColumns(['name', 'values', 'status', 'action'])->make(true);
         }
 
         return view('options.index', compact('pageName'));

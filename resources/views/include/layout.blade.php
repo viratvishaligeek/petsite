@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
-@include('backend.include.meta')
+@include('include.meta')
 
 <body>
     <main class="main" id="top">
-        @include('backend.include.sidebar')
-        @include('backend.include.header')
+        @include('include.sidebar')
+        @include('include.header')
         <div class="content">
             @yield('content')
-            @include('backend.include.footer')
+            @include('include.footer')
         </div>
         <div class="modal fade" id="searchBoxModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true"
             data-phoenix-modal="data-phoenix-modal" style="--phoenix-backdrop-opacity: 1;">
@@ -209,20 +209,8 @@
     <script src="{{ URL::asset('backend') }}/dayjs/dayjs.min.js"></script>
     <script src="{{ URL::asset('backend') }}/js/phoenix.js"></script>
     @yield('script')
-    @include('backend.partial.toast')
-    <script>
-        $('#tenantSelector').on('change', function() {
-            let tenantId = $(this).val();
-            $.post("{{ route('admin.update_active_tenant') }}", {
-                _token: "{{ csrf_token() }}",
-                tenant_id: tenantId
-            }, function(response) {
-                if (response.success) {
-                    window.location.reload();
-                }
-            });
-        });
-    </script>
+    @include('partial.toast')
+
 </body>
 
 </html>

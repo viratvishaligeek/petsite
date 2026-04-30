@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <div class="row">

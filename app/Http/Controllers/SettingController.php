@@ -10,39 +10,21 @@ use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
 {
-    public function edit($page)
+    public function edit(string $page)
     {
-        $user = Auth::user();
-        $tenantId = $user->tenant_id;
-        if ($tenantId === 0) {
-            if ($page === 'global') {
-                $pageName = 'Global Settings';
-                return view('setting.' . $page, compact('pageName'));
-            }
-            return redirect(route('admin.dashboard'))->with('error', 'Please select a tenant first.');
-        }
-        $tenant = TenantList($tenantId);
-        if (!$tenant) {
-            return redirect(route('admin.dashboard'))->with('error', 'Tenant not found.');
-        }
-        if ($page === 'global') {
-            return redirect(route('admin.dashboard'))->with('error', 'Global settings are only for super-admin.');
-        }
-        $capital = ucfirst($page);
-        $pageName = ($tenant->name ?? 'Tenant') . "'s " . $capital . ' Settings';
-        return view('setting.' . $page, compact('pageName'));
+        // $user = Auth::user();
+        // $capital = ucfirst($page);
+        // return view('setting.' . $page, compact('pageName'));
     }
 
     public function store(Request $request)
     {
         try {
             $user = Auth::user();
-            $tenantId = $request->tenant_id ?? ($user->tenant_id ?? 1);
-            foreach ($request->except('_token', 'tenant_id') as $key => $value) {
+            foreach ($request->except('_token') as $key => $value) {
                 Setting::updateOrCreate(
                     [
                         'option' => $key,
-                        'tenant_id' => $tenantId,
                     ],
                     [
                         'value' => $value

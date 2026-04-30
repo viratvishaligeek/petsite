@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <div class="row">
@@ -9,12 +9,6 @@
                         <input class="form-control" id="floatingInputGrid" value="{{ old('name') ?? $data->name }}"
                             placeholder="name" disabled />
                         <label for="floatingInputGrid">Name</label>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <div class="form-floating">
-                        <input class="form-control" value="{{ $data->tenant->name ?? '' }}" disabled>
-                        <label>Tenant</label>
                     </div>
                 </div>
                 <div class="col-sm-4 col-md-4">

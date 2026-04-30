@@ -9,15 +9,6 @@ use Spatie\Permission\PermissionRegistrar;
 
 Artisan::command('permissions:setup', function () {
     $allPermissions = [
-        // custom tenant change permissions
-        'choose_tenant',
-        // Tenant | Team Member | Roles permissions
-        'tenant-browse',
-        'tenant-read',
-        'tenant-edit',
-        'tenant-add',
-        'tenant-delete',
-        // ----------------
         'team-browse',
         'team-read',
         'team-edit',

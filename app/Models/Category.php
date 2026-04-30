@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use App\Traits\HasSeo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use BelongsToTenant, HasFactory, SoftDeletes, HasSeo;
+    use HasFactory, SoftDeletes, HasSeo;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +20,6 @@ class Category extends Model
         'name',
         'slug',
         'parent_id',
-        'tenant_id',
         'is_parent',  // yes, no
         'featured_image',
         'description',
@@ -29,10 +27,7 @@ class Category extends Model
 
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
+
 
     public function parent()
     {
@@ -56,7 +51,6 @@ class Category extends Model
 
 
     protected $hidden = [
-        'tenant_id',
         'created_at',
         'updated_at',
         'deleted_at',

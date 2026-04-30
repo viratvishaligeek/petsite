@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('email', 50);
             $table->longText('message')->nullable();
             $table->enum('status', ['read', 'unread'])->default('unread');
-            $table->bigInteger('tenant_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });

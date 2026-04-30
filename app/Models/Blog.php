@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use App\Traits\HasSeo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
 {
-    use BelongsToTenant, HasFactory, SoftDeletes, HasSeo;
+    use HasFactory, SoftDeletes, HasSeo;
 
     /**
      * The attributes that are mass assignable.
@@ -26,16 +25,11 @@ class Blog extends Model
         'publish_date',
         'tags',
         'category_id',
-        'tenant_id',
         'description',
         'status',
 
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
 
     public function category()
     {
@@ -58,7 +52,6 @@ class Blog extends Model
     }
 
     protected $hidden = [
-        'tenant_id',
         'created_at',
         'updated_at',
         'deleted_at',

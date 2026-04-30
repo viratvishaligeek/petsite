@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <form class="row mb-3" action="{{ route('admin.blog.update', encrypt($data->id)) }}" method="post">

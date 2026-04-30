@@ -48,8 +48,6 @@ class BlogController extends Controller
                 return '<p class="text-sm font-weight-bold mb-0 text-capitalize">' . $row->name . '</p>';
             })->editColumn('category', function ($row) {
                 return '<p class="text-sm mb-0 text-capitalize">' . $row->category->name . '</p>';
-            })->editColumn('tenant', function ($row) {
-                return '<p class="text-sm mb-0 text-capitalize">' . $row->tenant->name . '</p>';
             })->editColumn('author', function ($row) {
                 return '<p class="text-sm mb-0 text-capitalize">' . $row->author->name . '</p>';
             })->editColumn('publisher', function ($row) {
@@ -79,7 +77,7 @@ class BlogController extends Controller
                 $btn .= '</div>';
 
                 return $btn;
-            })->rawColumns(['name', 'author', 'publisher', 'category', 'tenant', 'status', 'action'])->make(true);
+            })->rawColumns(['name', 'author', 'publisher', 'category', 'status', 'action'])->make(true);
         }
 
         return view('blog.index', compact('pageName'));

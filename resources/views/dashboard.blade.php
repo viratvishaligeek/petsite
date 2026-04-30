@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('css')
     <link href="{{ URL::asset('backend') }}/leaflet/leaflet.css" rel="stylesheet">
     <link href="{{ URL::asset('backend') }}/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">

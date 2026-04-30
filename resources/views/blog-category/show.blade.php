@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <h2 class="mb-4">{{ $pageName }}</h2>
     <div class="row">
@@ -14,12 +14,6 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="form-floating">
                         {!! $data->description !!}
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6">
-                    <div class="form-floating">
-                        <input class="form-control" value="{{ $data->tenant->name ?? '' }}" disabled>
-                        <label for="floatingSelectPrivacy">Tenant</label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6">

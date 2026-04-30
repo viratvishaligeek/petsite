@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdvanceModule\RoleController;
 use App\Http\Controllers\AdvanceModule\TeamController;
-use App\Http\Controllers\AdvanceModule\TenantController;
 use App\Http\Controllers\SeoPluginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Blogger\BlogCategoryController;
@@ -30,12 +29,8 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::controller(DashboardController::class)->group(function () {
             Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('clear-cache', 'clearCache')->name('clear_cache');
-            Route::post('update-active-tenant', 'updateActiveTenant')->name('update_active_tenant');
             Route::get('logout', 'logout')->name('logout');
         });
-
-        // advance module routes
-        Route::resource('tenant', TenantController::class);
 
         // team member module routes
         Route::resource('team', TeamController::class);

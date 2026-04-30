@@ -1,4 +1,4 @@
-@extends('backend.include.layout')
+@extends('include.layout')
 @section('content')
     <div class="mb-4">
         <h2 class="mb-2">{{ $pageName }}</h2>
@@ -8,12 +8,12 @@
     <div class="row">
         <div class="col-12">
             {{-- tabs menu start here --}}
-            @include('backend.product.partial.tabs')
+            @include('product.partial.tabs')
             {{-- tabs menu end here --}}
 
             <div class="tab-content mt-4" id="productTabContent">
                 <div class="tab-pane fade show active" id="tab-general" role="tabpanel">
-                    @include('backend.product.partial.faqs')
+                    @include('product.partial.faqs')
                 </div>
             </div>
         </div>
